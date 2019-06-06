@@ -380,15 +380,15 @@ class MWSClient{
      * @return array
      */
     public function ListOrders(DateTime $from, $allMarketplaces = false, $states = [
-        'Unshipped', 'PartiallyShipped'
-    ], $FulfillmentChannels = 'MFN', DateTime $till = null)
+        'Shipped', 'Unshipped', 'PartiallyShipped'
+    ], $FulfillmentChannels = ['MFN', 'AFN'], DateTime $till = null)
     {
         $query = [
-            'CreatedAfter' => gmdate(self::DATE_FORMAT, $from->getTimestamp())
+            'LastUpdatedAfter' => gmdate(self::DATE_FORMAT, $from->getTimestamp())
         ];
 
         if ($till !== null) {
-          $query['CreatedBefore'] = gmdate(self::DATE_FORMAT, $till->getTimestamp());
+          $query['LastUpdatedBefore'] = gmdate(self::DATE_FORMAT, $till->getTimestamp());
         }
 
         $counter = 1;
@@ -417,25 +417,13 @@ class MWSClient{
 
         $response = $this->request('ListOrders', $query);
 
-        if (isset($response['ListOrdersResult']['Orders']['Order'])) {
-            if (isset($response['ListOrdersResult']['NextToken'])) {
-                $data['ListOrders'] = $response['ListOrdersResult']['Orders']['Order'];
-                $data['NextToken'] = $response['ListOrdersResult']['NextToken'];
-                return $data;
-            }
-        
-            $response = $response['ListOrdersResult']['Orders']['Order'];
-        
-            if (array_keys($response) !== range(0, count($response) - 1)) {
-                return [$response];
-            }
-        
-            return $response;
-        
-        } else {
-            return [];
+        if (!isset($response['ListOrdersResult']['Orders']['Order'])) {
+            $response['ListOrdersResult']['Orders'] = [];
+            $response['ListOrdersResult']['Orders']['Order'] = [];
         }
+        return $response['ListOrdersResult'];
     }
+
     /**
      * Returns orders created or updated during a time frame that you specify.
      * @param string $nextToken
@@ -451,22 +439,15 @@ class MWSClient{
             'ListOrdersByNextToken',
             $query
         );
-        if (isset($response['ListOrdersByNextTokenResult']['Orders']['Order'])) {
-            if(isset($response['ListOrdersByNextTokenResult']['NextToken'])){
-                $data['ListOrders'] = $response['ListOrdersByNextTokenResult']['Orders']['Order'];
-                $data['NextToken'] = $response['ListOrdersByNextTokenResult']['NextToken'];
-                return $data;
-            }
-            $response = $response['ListOrdersByNextTokenResult']['Orders']['Order'];
 
-            if (array_keys($response) !== range(0, count($response) - 1)) {
-                return [$response];
-            }
-            return $response;
-        } else {
-            return [];
+        if (!isset($response['ListOrdersResult']['Orders']['Order'])) {
+            $response['ListOrdersResult']['Orders'] = [];
+            $response['ListOrdersResult']['Orders']['Order'] = [];
         }
+
+        return $response['ListOrdersResult'];
     }
+
     /**
      * Returns an order based on the AmazonOrderId values that you specify.
      * @param string $AmazonOrderId

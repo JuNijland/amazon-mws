@@ -1,13 +1,13 @@
 {
-    "name": "mcs/amazon-mws",
+    "name": "dollie/amazon-mws",
     "description": "Library to interface with Amazon MWS",
     "license": "MIT",
     "keywords": ["amazon", "mws"],
     "minimum-stability": "dev",
     "authors": [
         {
-            "name": "Michiel Meertens",
-            "email": "meertensmichiel28@gmail.com"
+            "name": "Jurgen Nijland",
+            "email": "jurgennijland.96@gmail.com"
         }
     ],
     "require": {

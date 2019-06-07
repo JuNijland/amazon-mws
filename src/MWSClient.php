@@ -379,9 +379,9 @@ class MWSClient{
      * @param object DateTime $till, end of time frame
      * @return array
      */
-    public function ListOrders(DateTime $from, $allMarketplaces = false, $states = [
+    public function ListOrders(\DateTimeInterface $from, $allMarketplaces = false, $states = [
         'Shipped', 'Unshipped', 'PartiallyShipped'
-    ], $FulfillmentChannels = ['MFN', 'AFN'], DateTime $till = null)
+    ], $FulfillmentChannels = ['MFN', 'AFN'], \DateTimeInterface $till = null)
     {
         $query = [
             'LastUpdatedAfter' => gmdate(self::DATE_FORMAT, $from->getTimestamp())

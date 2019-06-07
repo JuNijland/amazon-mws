@@ -440,12 +440,12 @@ class MWSClient{
             $query
         );
 
-        if (!isset($response['ListOrdersResult']['Orders']['Order'])) {
-            $response['ListOrdersResult']['Orders'] = [];
-            $response['ListOrdersResult']['Orders']['Order'] = [];
+        if (!isset($response['ListOrdersByNextTokenResult']['Orders']['Order'])) {
+            $response['ListOrdersByNextTokenResult']['Orders'] = [];
+            $response['ListOrdersByNextTokenResult']['Orders']['Order'] = [];
         }
 
-        return $response['ListOrdersResult'];
+        return $response['ListOrdersByNextTokenResult'];
     }
 
     /**

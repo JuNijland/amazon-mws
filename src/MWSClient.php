@@ -548,6 +548,33 @@ class MWSClient
     }
 
     /**
+     * Returns orders created or updated during a time frame that you specify.
+     *
+     * @param string $nextToken
+     *
+     * @return array
+     */
+    public function ListOrderItemsByNextToken($nextToken)
+    {
+        $query = [
+            'NextToken' => $nextToken
+        ];
+
+        $response = $this->request(
+            'ListOrderItemsByNextToken',
+            $query
+        );
+
+        $result = array_values($response['ListOrderItemsByNextTokenResult']['OrderItems']);
+
+        if (isset($result[0]['QuantityOrdered'])) {
+            return $result;
+        } else {
+            return $result[0];
+        }
+    }
+
+    /**
      * Returns the parent product categories that a product belongs to, based
      * on SellerSKU.
      *

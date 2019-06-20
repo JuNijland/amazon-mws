@@ -1302,7 +1302,7 @@ class MWSClient
 
                 if (is_string($result)) {
                     $csv = Reader::createFromString($result);
-                    $csv->setDelimiter("\t");
+                    $csv->setDelimiter(",");
                     $headers = $csv->fetchOne();
                     $result = [];
                     foreach ($csv->setOffset(1)->fetchAll() as $row) {
